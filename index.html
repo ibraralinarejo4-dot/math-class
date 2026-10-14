@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9th Class Mega Academy</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        /* --- CSS STYLES (Colorful & Modern) --- */
+        :root {
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --header-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            --maths-color: #0984e3;
+            --physics-color: #e84393;
+            --chemistry-color: #00cec9;
+            --biology-color: #2ecc71;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --header-gradient: linear-gradient(135deg, #1e1e24, #4834d4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .theme-toggle:hover { background: rgba(255,255,255,0.4); }
+
+        /* Subjects Navigation Dashboard */
+        .subjects-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            border-bottom: 5px solid transparent;
+        }
+
+        .subject-card:hover, .subject-card.active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Active Card Colors */
+        .subject-card.maths.active { border-bottom-color: var(--maths-color); color: var(--maths-color); }
+        .subject-card.physics.active { border-bottom-color: var(--physics-color); color: var(--physics-color); }
+        .subject-card.chemistry.active { border-bottom-color: var(--chemistry-color); color: var(--chemistry-color); }
+        .subject-card.biology.active { border-bottom-color: var(--biology-color); color: var(--biology-color); }
+
+        .subject-card i { font-size: 2.5rem; margin-bottom: 10px; }
+        .subject-card h3 { font-size: 1.2rem; color: var(--text-main); }
+
+        /* Dynamic Content Section */
+        .content-section {
+            max-width: 1000px;
+            margin: 20px auto 40px auto;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: none; /* JS will toggle this */
+        }
+
+        .content-section.active-content { display: block; }
+
+        .badge-chapter {
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        /* Color Coding for Badges */
+        .maths-badge { background-color: var(--maths-color); }
+        .physics-badge { background-color: var(--physics-color); }
+        .chemistry-badge { background-color: var(--chemistry-color); }
+        .biology-badge { background-color: var(--biology-color); }
+
+        h2.chapter-title {
+            color: var(--text-main);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            border-left: 5px solid #6c5ce7;
+            padding-left: 15px;
+        }
+
+        /* Content Boxes */
+        .box { margin: 20px 0; padding: 25px; border-radius: 12px; }
+        .concept-box { background-color: rgba(108, 92, 231, 0.08); border-left: 5px solid #6c5ce7; }
+        .example-box { background-color: rgba(29, 209, 161, 0.08); border-left: 5px solid #1dd1a1; }
+        .exercise-box { background-color: rgba(255, 107, 107, 0.08); border-left: 5px solid #ff6b6b; }
+
+        .box h4 { margin-bottom: 10px; font-size: 1.15rem; color: var(--text-main); }
+        .box p { color: var(--text-muted); line-height: 1.6; }
+
+        .matrix {
+            display: inline-block;
+            font-family: monospace;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 8px;
+            border-left: 2px solid var(--text-main);
+            border-right: 2px solid var(--text-main);
+        }
+
+        footer { text-align: center; padding: 25px; background: #1e1e1e; color: white; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>9th Class Complete Academy</h1>
+        <p>All Subjects • Proper Notes • Solved Examples & Exercises</p>
+        <button class="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i> Theme</button>
+    </header>
+
+    <!-- Interactive Navigation Cards -->
+    <div class="subjects-container">
+        <div class="subject-card maths active" onclick="switchSubject('maths', this)">
+            <i class="fa-solid fa-calculator"></i>
+            <h3>Mathematics</h3>
+        </div>
+        <div class="subject-card physics" onclick="switchSubject('physics', this)">
+            <i class="fa-solid fa-atom"></i>
+            <h3>Physics</h3>
+        </div>
+        <div class="subject-card chemistry" onclick="switchSubject('chemistry', this)">
+            <i class="fa-solid fa-flask"></i>
+            <h3>Chemistry</h3>
+        </div>
+        <div class="subject-card biology" onclick="switchSubject('biology', this)">
+            <i class="fa-solid fa-dna"></i>
+            <h3>Biology</h3>
+        </div>
+    </div>
+
+    <!-- ================= MATHEMATICS SECTION ================= -->
+    <div id="maths-content" class="content-section active-content">
+        <span class="badge-chapter maths-badge">Mathematics</span>
+        <h2 class="chapter-title">Chapter 1: Matrices and Determinants</h2>
+        <div class="box concept-box">
+            <h4><i class="fa-solid fa-book"></i> Concept: What is a Matrix?</h4>
+            <p>Real numbers ko brackets me tarteeb se likhne ko Matrix kehte hain. (e.g., <span class="matrix">[1 2; 3 4]</span>).</p>
+        </div>
+        <div class="box example-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Solved Example</h4>
+            <p><strong>Find Order:</strong> Matrix <span class="matrix">[2 3; 1 0]</span> has 2 rows and 2 columns. So its order is <strong>2-by-2</strong>.</p>
+        </div>
+        <div class="box exercise-box">
+            <h4><i class="fa-solid fa-square-check"></i> Exercise 1.1 Solution</h4>
+            <p><strong>Q1: Find order of B = <span class="matrix">[2 0; 3 5]</span></strong><br>Answer: It has 2 rows and 2 columns. Order = 2-by-2.</p>
+        </div>
+    </div>
+
+    <!-- ================= PHYSICS SECTION ================= -->
+    <div id="physics-content" class="content-section">
+        <span class="badge-chapter physics-badge">Physics</span>
+        <h2 class="chapter-title">Chapter 1: Physical Quantities & Measurement</h2>
+        <div class="box concept-box">
+            <h4><i class="fa-solid fa-book"></i> Concept: Physical Quantities</h4>
+            <p>Un tamaam cheezon ko jinhe napa (measure) ja sake, unhe physical quantities kehte hain (e.g., Length, Mass).</p>
+        </div>
+        <div class="box example-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Solved Example</h4>
+            <p>Convert 50 km/h to m/s: (50 × 1000) / 3600 = <strong>13.88 m/s</strong>.</p>
+        </div>
+        <div class="box exercise-box">
+            <h4><i class="fa-solid fa-square-check"></i> Exercise 1.1 Solution</h4>
+            <p><strong>Q1: Difference between Base and Derived?</strong><br>Base quantities automatic hoti hain (Mass), derived unse banti hain (Speed).</p>
+        </div>
+    </div>
+
+    <!-- ================= CHEMISTRY SECTION ================= -->
+    <div id="chemistry-content" class="content-section">
+        <span class="badge-chapter chemistry-badge">Chemistry</span>
+        <h2 class="chapter-title">Chapter 1: Fundamentals of Chemistry</h2>
+        <div class="box concept-box">
+            <h4><i class="fa-solid fa-book"></i> Concept: Element and Compound</h4>
+            <p><strong>Element:</strong> Jo ek hi qisam ke atoms se bana ho (e.g., Oxygen O₂).<br><strong>Compound:</strong> Jo mukhtalif elements se mil kar bane (e.g., Water H₂O).</p>
+        </div>
+        <div class="box example-box">
+            <h4><i class="fa-solid fa-lightbulb"></i> Solved Example</h4>
+            <p>Calculate molecular mass of H₂O: H(1×2) + O(16) = <strong>18 amu</strong>.</p>
+        </div>
+        <div class="box exercise-box">
+            <h4><i class="fa-solid fa-square-check"></i> Exercise 1.1 Solution</h4>
+            <p><strong>Q1: Define Valency.</strong><br>Kisi element ki doosre elements ke sath milne ki quwwat (combining capacity) ko valency kehte hain.</p>
+        </div>
+    </div>
+
